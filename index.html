@@ -1,95 +1,101 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Basket Parents</title>
-<style>
-body {
-  font-family: -apple-system;
-  background: #0b0b0b;
-  color: white;
-  padding: 15px;
-}
-h1 { text-align: center; }
-.add { display: flex; gap: 10px; }
-input, button {
-  font-size: 18px;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-}
-.player {
-  background: #1c1c1e;
-  margin-top: 10px;
-  padding: 10px;
-  border-radius: 12px;
-}
-.score { font-size: 24px; font-weight: bold; }
-.footer {
-  position: sticky;
-  bottom: 0;
-  background: black;
-  padding: 10px;
-  text-align: center;
-}
-.reset { background: red; color: white; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Match Basket</title>
+  <style>
+    body {
+      background: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      width: 60%;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+    .add {
+      background: #eee;
+      color: #007aff;
+    }
+    .player {
+      background: #111;
+      margin: 15px auto;
+      padding: 10px;
+      border-radius: 10px;
+      width: 90%;
+    }
+    .score button {
+      background: #444;
+      color: #fff;
+      margin: 5px;
+    }
+    .reset {
+      background: red;
+      color: white;
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
 </head>
 <body>
 
-<h1>🏀 Match en direct</h1>
+  <h1>🏀 Match en direct</h1>
 
-<div class="add">
-  <input id="name" placeholder="Nom du joueur">
-  <button onclick="add()">Ajouter</button>
-</div>
+  <input id="nameInput" placeholder="Nom du joueur">
+  <button class="add" onclick="addPlayer()">Ajouter</button>
 
-<div id="list"></div>
+  <h3>Total : <span id="total">0</span></h3>
 
-<div class="footer">
-  Total : <span id="total">0</span>
-  <br>
-  <button class="reset" onclick="reset()">Nouveau match</button>
-</div>
+  <div id="players"></div>
+
+  <button class="reset" onclick="resetMatch()">Nouveau match</button>
 
 <script>
-let total = 0;
+  let total = 0;
 
-function add() {
-  const n = name.value.trim();
-  if (!n) return;
-  const d = document.createElement("div");
-  d.className = "player";
-  d.innerHTML = `
-    <div>${n}</div>
-    <div class="score">0</div>
-    <button onclick="score(this,1)">+1</button>
-    <button onclick="score(this,2)">+2</button>
-    <button onclick="score(this,3)">+3</button>
-    <button onclick="score(this,-1)">−1</button>
-  `;
-  list.appendChild(d);
-  name.value = "";
-}
+  function addPlayer() {
+    const name = document.getElementById("nameInput").value.trim();
+    if (!name) return;
 
-function score(b,v){
-  const s = b.parentElement.querySelector(".score");
-  let p = +s.textContent;
-  if(p+v<0)return;
-  s.textContent = p+v;
-  total+=v;
-  if(total<0)total=0;
-  document.getElementById("total").textContent = total;
-}
+    const div = document.createElement("div");
+    div.className = "player";
+    div.innerHTML = `
+      <strong>${name}</strong><br>
+      <div class="score">
+        <button onclick="addPoints(1)">+1</button>
+        <button onclick="addPoints(2)">+2</button>
+        <button onclick="addPoints(3)">+3</button>
+      </div>
+    `;
 
-function reset(){
-  if(confirm("Nouveau match ?")){
-    list.innerHTML="";
-    total=0;
-    document.getElementById("total").textContent=0;
+    document.getElementById("players").appendChild(div);
+    document.getElementById("nameInput").value = "";
   }
-}
+
+  function addPoints(points) {
+    total += points;
+    document.getElementById("total").innerText = total;
+  }
+
+  function resetMatch() {
+    total = 0;
+    document.getElementById("total").innerText = 0;
+    document.getElementById("players").innerHTML = "";
+  }
 </script>
 
 </body>
