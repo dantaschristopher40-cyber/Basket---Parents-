@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basket Parents</title>
+<style>
+body {
+  font-family: -apple-system;
+  background: #0b0b0b;
+  color: white;
+  padding: 15px;
+}
+h1 { text-align: center; }
+.add { display: flex; gap: 10px; }
+input, button {
+  font-size: 18px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+}
+.player {
+  background: #1c1c1e;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 12px;
+}
+.score { font-size: 24px; font-weight: bold; }
+.footer {
+  position: sticky;
+  bottom: 0;
+  background: black;
+  padding: 10px;
+  text-align: center;
+}
+.reset { background: red; color: white; }
+</style>
+</head>
+<body>
+
+<h1>🏀 Match en direct</h1>
+
+<div class="add">
+  <input id="name" placeholder="Nom du joueur">
+  <button onclick="add()">Ajouter</button>
+</div>
+
+<div id="list"></div>
+
+<div class="footer">
+  Total : <span id="total">0</span>
+  <br>
+  <button class="reset" onclick="reset()">Nouveau match</button>
+</div>
+
+<script>
+let total = 0;
+
+function add() {
+  const n = name.value.trim();
+  if (!n) return;
+  const d = document.createElement("div");
+  d.className = "player";
+  d.innerHTML = `
+    <div>${n}</div>
+    <div class="score">0</div>
+    <button onclick="score(this,1)">+1</button>
+    <button onclick="score(this,2)">+2</button>
+    <button onclick="score(this,3)">+3</button>
+    <button onclick="score(this,-1)">−1</button>
+  `;
+  list.appendChild(d);
+  name.value = "";
+}
+
+function score(b,v){
+  const s = b.parentElement.querySelector(".score");
+  let p = +s.textContent;
+  if(p+v<0)return;
+  s.textContent = p+v;
+  total+=v;
+  if(total<0)total=0;
+  document.getElementById("total").textContent = total;
+}
+
+function reset(){
+  if(confirm("Nouveau match ?")){
+    list.innerHTML="";
+    total=0;
+    document.getElementById("total").textContent=0;
+  }
+}
+</script>
+
+</body>
+</html>
